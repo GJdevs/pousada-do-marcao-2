@@ -1,0 +1,623 @@
+/* ============================================================
+   disponibilidade.css — Pousada do Marcão 2
+============================================================ */
+
+/* ── CALENDÁRIO CLICÁVEL ─────────────────────────────────── */
+.cal-disp {
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.cal-disp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 0.5px solid rgba(0,0,0,0.08);
+}
+
+.cal-disp-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.cal-disp-btn {
+  background: none;
+  border: 0.5px solid rgba(0,0,0,0.12);
+  border-radius: 6px;
+  padding: 3px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1a1a1a;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s;
+}
+
+.cal-disp-btn:hover { background: rgba(0,0,0,0.04); }
+
+.cal-disp-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  padding: 8px 12px 4px;
+}
+
+.cal-disp-header span {
+  text-align: center;
+  font-size: 11px;
+  color: #6b7280;
+  padding: 2px 0;
+}
+
+.cal-disp-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  padding: 0 12px 10px;
+}
+
+.cal-disp-day {
+  border-radius: 6px;
+  padding: 6px 2px;
+  text-align: center;
+  cursor: pointer;
+  border: 0.5px solid transparent;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 400;
+  color: #1a1a1a;
+  transition: all 0.1s;
+  user-select: none;
+}
+
+.cal-disp-day.vazio { cursor: default; }
+.cal-disp-day.passado { opacity: 0.3; cursor: default; }
+
+/* Dias passados que estavam reservados — controle visual */
+.cal-disp-day.passado-reservado {
+  background: #F3F4F6;
+  border-color: #D1D5DB;
+  color: #9CA3AF;
+  cursor: default;
+  position: relative;
+}
+
+.cal-disp-day.passado-reservado::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #9CA3AF;
+}
+
+/* Range entre as datas — verde claro, não escuro */
+.cal-disp-day.range {
+  background: #D1FAE5;
+  border-color: #6EE7B7;
+  border-radius: 0;
+  color: #065F46;
+}
+
+/* Próxima data disponível */
+.disp-prox-disp {
+  font-size: 12px;
+  color: #854F0B;
+  background: #FAEEDA;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+.cal-disp-day.livre {
+  background: #E1F5EE;
+  border-color: #5DCAA5;
+}
+
+.cal-disp-day.livre:hover {
+  border-color: #0F6E56;
+  background: #c8eddf;
+}
+
+.cal-disp-day.ocupado {
+  background: #FCEBEB;
+  border-color: #F09595;
+  cursor: not-allowed;
+}
+.cal-disp-day.ocupado:hover { border-color: #E24B4A; }
+
+.cal-disp-day.sel {
+  background: #0F6E56 !important;
+  border-color: #0F6E56 !important;
+  color: #fff !important;
+  font-weight: 500;
+}
+
+.cal-disp-day.range {
+  background: #E1F5EE;
+  border-color: #9FE1CB;
+  border-radius: 0;
+}
+
+.cal-disp-info {
+  padding: 8px 14px 12px;
+  font-size: 13px;
+  color: #6b7280;
+  border-top: 0.5px solid rgba(0,0,0,0.08);
+}
+
+/* ── CARDS DE SUÍTES ─────────────────────────────────────── */
+.disp-hint {
+  font-size: 14px;
+  color: #6b7280;
+  padding: 1rem 0;
+}
+
+.disp-loading {
+  font-size: 14px;
+  color: #6b7280;
+  padding: 1rem 0;
+}
+
+.disp-resumo {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.disp-suite-card {
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  transition: border-color 0.15s;
+}
+
+.disp-suite-card.disp { border-color: #5DCAA5; }
+.disp-suite-card.ocup { opacity: 0.55; }
+
+.disp-sc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 160px;
+}
+
+.disp-sc-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 99px;
+  width: fit-content;
+}
+
+.tag-d { background: #E1F5EE; color: #085041; }
+.tag-o { background: #FCEBEB; color: #A32D2D; }
+
+.disp-sc-nome {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.disp-sc-nome:hover { color: #0F6E56; }
+
+.disp-sc-desc {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.disp-sc-acao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.disp-sc-preco {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0F6E56;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.2;
+}
+
+.disp-sc-preco span {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b7280;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.disp-sc-total {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.disp-sc-parcelas {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.disp-especial {
+  color: #4338CA;
+  font-size: 10px;
+}
+
+/* ── BOTÕES ──────────────────────────────────────────────── */
+.disp-btns-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.disp-btn-booking {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #003580;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 12px;
+  border-radius: 99px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.disp-btn-booking:hover { background: #002560; }
+
+.disp-btn-wpp {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #25D366;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 12px;
+  border-radius: 99px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.disp-btn-wpp:hover { background: #1ebe5c; }
+
+.disp-btn-indisp {
+  display: inline-block;
+  background: #FCEBEB;
+  color: #A32D2D;
+  font-size: 12px;
+  padding: 7px 14px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+/* ── AVISOS ──────────────────────────────────────────────── */
+.disp-aviso {
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.aviso-warn { background: #FAEEDA; color: #854F0B; }
+.aviso-err  { background: #FCEBEB; color: #A32D2D; }
+
+/* ── VERIFICAÇÃO NAS SUÍTES ──────────────────────────────── */
+.sv-wrap {
+  background: #FAF6EF;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 0.5px solid rgba(0,0,0,0.08);
+}
+
+.sv-titulo {
+  font-size: 11px;
+  font-weight: 500;
+  color: #0F6E56;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+}
+
+.sv-status {
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.sv-livre   { background: #E1F5EE; color: #085041; }
+.sv-ocupado { background: #FCEBEB; color: #A32D2D; }
+
+/* ── RESPONSIVO ──────────────────────────────────────────── */
+@media(max-width: 600px) {
+  .disp-suite-card { flex-direction: column; align-items: flex-start; }
+  .disp-sc-acao { align-items: flex-start; width: 100%; }
+  .disp-btns-row { justify-content: flex-start; }
+  .cal-disp-day { min-height: 32px; font-size: 12px; }
+}
+
+/* ── FERIADOS E DATAS ESPECIAIS ──────────────────────────── */
+.cal-disp-day.feriado {
+  background: #FAEEDA;
+  border-color: #F0C27B;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 5px;
+}
+.cal-disp-day.feriado:hover { border-color: #BA7517; }
+
+.cal-disp-day.especial {
+  background: #EEF2FF;
+  border-color: #A5B4FC;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 5px;
+}
+.cal-disp-day.especial:hover { border-color: #6366F1; }
+
+.cal-day-num {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  display: block;
+}
+.cal-disp-day.feriado .cal-day-num { color: #854F0B; }
+.cal-disp-day.especial .cal-day-num { color: #4338CA; }
+
+.cal-day-tag {
+  font-size: 8px;
+  line-height: 1.2;
+  text-align: center;
+  display: block;
+  margin-top: 2px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cal-disp-day.feriado .cal-day-tag { color: #BA7517; }
+.cal-disp-day.especial .cal-day-tag { color: #6366F1; }
+
+.cal-disp-day.sel .cal-day-num,
+.cal-disp-day.sel .cal-day-tag { color: #fff !important; }
+
+/* Legenda atualizada */
+.cal-disp-legenda {
+  display: flex;
+  gap: 10px;
+  padding: 8px 12px 10px;
+  border-top: 0.5px solid rgba(0,0,0,0.08);
+  flex-wrap: wrap;
+}
+.cal-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #6b7280;
+}
+.cal-leg-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── ANIMAÇÃO PISCAR ─────────────────────────────────────── */
+@keyframes piscaAtencao {
+  0%   { box-shadow: 0 0 0 0 rgba(15,110,86,0.5); transform: scale(1); }
+  30%  { box-shadow: 0 0 0 6px rgba(15,110,86,0.2); transform: scale(1.02); }
+  60%  { box-shadow: 0 0 0 0 rgba(15,110,86,0); transform: scale(1); }
+  80%  { box-shadow: 0 0 0 4px rgba(15,110,86,0.15); transform: scale(1.01); }
+  100% { box-shadow: 0 0 0 0 rgba(15,110,86,0); transform: scale(1); }
+}
+
+.pessoas-toggle.piscar {
+  animation: piscaAtencao 0.7s ease;
+  border-color: #0F6E56 !important;
+}
+
+/* Calendário bloqueado */
+.cal-disp-days.bloqueado {
+  pointer-events: none;
+  opacity: 0.45;
+  position: relative;
+}
+
+.cal-disp-days.bloqueado::after {
+  content: 'Selecione o número de hóspedes primeiro';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #0F6E56;
+  font-weight: 500;
+  background: rgba(255,255,255,0.7);
+  border-radius: 8px;
+  text-align: center;
+  padding: 0 16px;
+  pointer-events: none;
+}
+.disp-controles {
+  margin-bottom: 0.75rem;
+}
+
+.pessoas-wrap {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.pessoas-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--color-text-primary, #1a1a1a);
+  user-select: none;
+  transition: border-color 0.15s;
+}
+.pessoas-toggle:hover { border-color: #0F6E56; }
+
+.pessoas-drop {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.12);
+  border-radius: 10px;
+  padding: 8px 0;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.pessoas-drop.open { display: block; }
+
+.pessoas-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
+}
+.pessoas-row:last-of-type { border-bottom: none; }
+
+.pessoas-tipo { font-size: 14px; color: #1a1a1a; font-weight: 400; }
+.pessoas-sub  { font-size: 12px; color: #6b7280; }
+
+.pessoas-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pessoas-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(0,0,0,0.2);
+  background: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #1a1a1a;
+  transition: background 0.15s;
+  line-height: 1;
+}
+.pessoas-btn:hover { background: #f0f0f0; }
+
+.pessoas-ctrl span {
+  font-size: 15px;
+  font-weight: 500;
+  min-width: 16px;
+  text-align: center;
+  color: #1a1a1a;
+}
+
+.pessoas-nota {
+  font-size: 11px;
+  color: #9CA3AF;
+  padding: 6px 16px 4px;
+  text-align: center;
+}
+
+.pessoas-fechar {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 6px 16px 8px;
+  background: #0F6E56;
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* badge pessoa extra */
+.disp-extra-badge {
+  font-size: 11px;
+  color: #854F0B;
+  background: #FAEEDA;
+  padding: 2px 8px;
+  border-radius: 99px;
+  margin-top: 3px;
+  display: inline-block;
+}
+
+/* ── FERIADOS E ESPECIAIS ────────────────────────────────── */
+.cal-disp-day.feriado {
+  background: #FAEEDA;
+  border-color: #F0C27B;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 5px;
+  min-height: 44px;
+}
+.cal-disp-day.feriado:hover { border-color: #BA7517; }
+.cal-disp-day.especial {
+  background: #EEF2FF;
+  border-color: #A5B4FC;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 5px;
+  min-height: 44px;
+}
+.cal-disp-day.especial:hover { border-color: #6366F1; }
+.cal-day-num { font-size: 12px; font-weight: 500; line-height: 1; display: block; }
+.cal-disp-day.feriado .cal-day-num { color: #854F0B; }
+.cal-disp-day.especial .cal-day-num { color: #4338CA; }
+.cal-day-tag { font-size: 8px; line-height: 1.2; text-align: center; display: block; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.cal-disp-day.feriado .cal-day-tag { color: #BA7517; }
+.cal-disp-day.especial .cal-day-tag { color: #6366F1; }
+.cal-disp-day.sel .cal-day-num,
+.cal-disp-day.sel .cal-day-tag { color: #fff !important; }
+.cal-disp-legenda { display:flex; gap:10px; padding:8px 12px 10px; border-top:0.5px solid rgba(0,0,0,0.08); flex-wrap:wrap; }
+.cal-leg-item { display:flex; align-items:center; gap:4px; font-size:11px; color:#6b7280; }
+.cal-leg-dot { width:9px; height:9px; border-radius:2px; flex-shrink:0; }

@@ -1,0 +1,397 @@
+/* ============================================================
+   POUSADA DO MARCÃO 2 — suite.css
+   Estilos das páginas individuais de suíte
+============================================================ */
+
+/* ── HERO DA SUÍTE ─────────────────────────────────────── */
+.suite-hero {
+  position: relative;
+  height: 55vh;
+  min-height: 380px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.suite-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.suite-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(4,52,44,0.15) 0%,
+    rgba(4,52,44,0.7) 100%
+  );
+}
+
+.suite-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 2.5rem 3rem;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.suite-breadcrumb {
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 10px;
+}
+
+.suite-breadcrumb a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+}
+
+.suite-breadcrumb a:hover { color: #fff; }
+.suite-breadcrumb span { margin: 0 6px; }
+
+.suite-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.suite-hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #E1F5EE;
+  font-size: 12px;
+  padding: 4px 14px;
+  border-radius: 99px;
+  margin-bottom: 10px;
+}
+
+/* ── NAVBAR ESCURA (para páginas internas) ─────────────── */
+.navbar-dark {
+  background: var(--verde-escuro) !important;
+  position: relative !important;
+  margin-bottom: 0 !important;
+}
+
+.navbar-dark .navbar-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+/* ── CORPO DA PÁGINA DA SUÍTE ──────────────────────────── */
+.suite-body {
+  padding: 4rem 2rem;
+  background: #fff;
+}
+
+.suite-body .container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+/* ── GALERIA DE FOTOS ──────────────────────────────────── */
+.galeria-suite { margin-bottom: 3rem; }
+
+.galeria-principal {
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 400px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.galeria-principal img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s;
+}
+
+.galeria-principal:hover img { transform: scale(1.02); }
+
+.galeria-thumbs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.thumb {
+  width: calc(25% - 6px);
+  height: 80px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb.ativa { border-color: var(--verde); }
+.thumb:hover { border-color: var(--verde-tag); }
+
+/* ── DESCRIÇÃO ─────────────────────────────────────────── */
+.suite-desc h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--texto);
+  margin-bottom: 1rem;
+}
+
+.suite-desc p {
+  font-size: 15px;
+  color: var(--texto-muted);
+  line-height: 1.75;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.suite-comodidades {
+  margin-top: 1.5rem;
+}
+
+.suite-comodidades h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texto);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.comod-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.comod-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--texto-muted);
+}
+
+.comod-dot {
+  width: 7px; height: 7px;
+  background: var(--verde);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── CARD DE RESERVA ───────────────────────────────────── */
+.reserva-card {
+  background: var(--areia);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  border: 1px solid var(--borda);
+  position: sticky;
+  top: 2rem;
+}
+
+.reserva-card .preco {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--verde);
+  margin-bottom: 4px;
+}
+
+.reserva-card .preco span {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--texto-muted);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.reserva-card .aviso {
+  font-size: 12px;
+  color: var(--texto-muted);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--borda);
+}
+
+.reserva-card label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--texto);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+  margin-top: 14px;
+}
+
+.reserva-card input,
+.reserva-card select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--borda);
+  background: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--texto);
+  outline: none;
+}
+
+.reserva-card input:focus,
+.reserva-card select:focus {
+  border-color: var(--verde);
+}
+
+.btn-reservar-full {
+  width: 100%;
+  background: var(--verde);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 14px;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  margin-top: 1.25rem;
+  transition: background 0.2s;
+}
+
+.btn-reservar-full:hover { background: var(--verde-medio); }
+
+.btn-whatsapp {
+  width: 100%;
+  background: transparent;
+  color: var(--verde);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 12px;
+  border-radius: 99px;
+  border: 1px solid var(--verde);
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+.btn-whatsapp:hover {
+  background: var(--verde-claro);
+}
+
+.reserva-nota {
+  font-size: 11px;
+  color: var(--texto-muted);
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* ── OUTRAS SUÍTES ─────────────────────────────────────── */
+.outras-suites {
+  padding: 4rem 2rem;
+  background: var(--areia);
+}
+
+.outras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 2rem;
+}
+
+/* ── LIGHTBOX ──────────────────────────────────────────── */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox.aberto { display: flex; }
+
+.lightbox img {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: var(--radius);
+}
+
+.lightbox-fechar {
+  position: absolute;
+  top: 1.5rem; right: 1.5rem;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-prev { left: 1.5rem; }
+.lightbox-next { right: 1.5rem; }
+
+/* ── RESPONSIVO ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .suite-body .container {
+    grid-template-columns: 1fr;
+  }
+
+  .suite-hero-content { padding: 2rem 1.5rem; }
+
+  .galeria-principal { height: 260px; }
+
+  .thumb { width: calc(33.33% - 6px); }
+
+  .comod-grid { grid-template-columns: 1fr; }
+
+  .reserva-card { position: static; }
+}
