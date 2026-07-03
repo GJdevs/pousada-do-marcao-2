@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel — Pousada do Marcão 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --v:#0F6E56;--ve:#04342C;--vc:#E1F5EE;
+      --tx:#1a1a1a;--mu:#6b7280;--bd:rgba(0,0,0,0.09);
+      --dn:#E24B4A;--db:#FCEBEB;--sn:#1D9E75;--sb:#E1F5EE;
+      --wn:#BA7517;--wb:#FAEEDA;--r:12px;--rs:8px;
+    }
+    body{font-family:'DM Sans',sans-serif;background:#f4f6f4;color:var(--tx);min-height:100vh;}
+    #tela-login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+    .login-box{background:#fff;border-radius:var(--r);border:1px solid var(--bd);padding:2.5rem 2rem;width:100%;max-width:380px;}
+    .login-logo{font-size:20px;font-weight:500;color:var(--ve);margin-bottom:4px;}
+    .login-sub{font-size:13px;color:var(--mu);margin-bottom:2rem;}
+    .campo{margin-bottom:1rem;}
+    .campo label{display:block;font-size:12px;font-weight:500;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;}
+    .campo input{width:100%;padding:11px 14px;border:1px solid var(--bd);border-radius:var(--rs);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;}
+    .campo input:focus{border-color:var(--v);}
+    .btn-login{width:100%;background:var(--v);color:#fff;font-size:14px;font-weight:500;padding:12px;border-radius:99px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+    .erro{font-size:13px;color:var(--dn);margin-top:10px;display:none;}
+    #tela-admin{display:none;}
+    .topbar{background:var(--ve);padding:0 1.5rem;height:56px;display:flex;align-items:center;justify-content:space-between;}
+    .topbar-logo{color:#fff;font-size:15px;font-weight:500;}
+    .topbar-right{display:flex;align-items:center;gap:12px;}
+    .topbar-user{font-size:12px;color:rgba(255,255,255,.6);}
+    .btn-sair{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;padding:5px 14px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+    .tabs{display:flex;gap:0;border-bottom:1px solid var(--bd);background:#fff;padding:0 1.5rem;}
+    .tab-btn{padding:14px 20px;font-size:13px;color:var(--mu);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;}
+    .tab-btn.on{color:var(--v);border-bottom-color:var(--v);font-weight:500;}
+    .main{max-width:960px;margin:0 auto;padding:2rem 1.5rem;}
+    .status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:2rem;}
+    .sc{background:#fff;border:1px solid var(--bd);border-radius:var(--r);padding:1rem 1.25rem;}
+    .sc-nome{font-size:13px;font-weight:500;margin-bottom:6px;}
+    .sc-badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px;}
+    .b-livre{background:var(--sb);color:var(--sn);}
+    .b-ocup{background:var(--db);color:var(--dn);}
+    .sc-info{font-size:11px;color:var(--mu);margin-top:4px;}
+    .cal-wrap{background:#fff;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:2rem;}
+    .cal-top{background:var(--ve);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+    .cal-top-title{color:#fff;font-size:14px;font-weight:500;}
+    .suite-sel{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;padding:5px 10px;border-radius:var(--rs);cursor:pointer;}
+    .suite-sel option{background:var(--ve);}
+    .cal-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bd);}
+    .cal-nav-btn{background:none;border:1px solid var(--bd);border-radius:var(--rs);padding:4px 12px;cursor:pointer;font-size:13px;}
+    .cal-nav-title{font-size:14px;font-weight:500;}
+    .cal-grid{padding:12px 16px;}
+    .cal-header{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;}
+    .cal-lbl{text-align:center;font-size:11px;color:var(--mu);padding:4px 0;}
+    .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+    .cal-day{border-radius:var(--rs);padding:6px 4px;text-align:center;cursor:pointer;border:.5px solid transparent;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all .1s;}
+    .cal-day.vazio{cursor:default;}
+    .cal-day.livre{background:var(--sb);border-color:#5DCAA5;}
+    .cal-day.livre:hover{border-color:var(--v);}
+    .cal-day.ocup{background:var(--db);border-color:#F09595;}
+    .cal-day.ocup-booking{background:var(--wb);border-color:#F0C27B;}
+    .cal-day.especial{background:#EEF2FF;border-color:#A5B4FC;}
+    .cal-day.selecionado{background:#0F6E56 !important;border-color:#0F6E56 !important;}
+    .cal-day.selecionado .day-n,.cal-day.selecionado .day-p{color:#fff !important;}
+    .cal-day.feriado-admin{background:#FAEEDA;border-color:#F0C27B;}
+    .cal-day.feriado-admin .day-n{color:#854F0B;}
+    .cal-day.feriado-admin .day-p{color:#BA7517;font-size:8px;}
+    .cal-day.especial-admin{background:#EEF2FF;border-color:#A5B4FC;}
+    .cal-day.especial-admin .day-n{color:#4338CA;}
+    .cal-day.especial-admin .day-p{color:#6366F1;font-size:8px;}
+    .cal-day.range-sel{background:#E1F5EE;border-color:#9FE1CB;border-radius:0;}
+    .day-n{font-size:13px;font-weight:500;}
+    .cal-day.ocup .day-n{color:var(--dn);}
+    .cal-day.ocup-booking .day-n{color:var(--wn);}
+    .cal-day.especial .day-n{color:#4338CA;}
+    .day-p{font-size:9px;color:var(--sn);}
+    .cal-day.ocup .day-p,.cal-day.ocup-booking .day-p{color:var(--wn);}
+    .cal-day.especial .day-p{color:#4338CA;}
+    .legend{display:flex;gap:12px;padding:8px 16px 12px;flex-wrap:wrap;}
+    .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mu);}
+    .leg-dot{width:10px;height:10px;border-radius:3px;}
+    .modal-edit{display:none;padding:14px 16px;border-top:1px solid var(--bd);background:#fafafa;}
+    .modal-edit.on{display:block;}
+    .modal-title{font-size:13px;font-weight:500;margin-bottom:12px;}
+    .form-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;}
+    .fc{display:flex;flex-direction:column;gap:4px;}
+    .fc label{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;}
+    .fc input,.fc select{padding:8px 10px;border:1px solid var(--bd);border-radius:var(--rs);font-size:13px;font-family:'DM Sans',sans-serif;color:var(--tx);background:#fff;outline:none;}
+    .fc input:focus,.fc select:focus{border-color:var(--v);}
+    .btn-salvar{background:var(--v);color:#fff;border:none;padding:9px 18px;border-radius:99px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+    .btn-cancel{background:#fff;color:var(--mu);border:1px solid var(--bd);padding:9px 18px;border-radius:99px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+    .msg-ok{font-size:12px;color:var(--sn);margin-top:8px;display:none;}
+    .msg-err{font-size:12px;color:var(--dn);margin-top:8px;display:none;}
+    .reservas-card{background:#fff;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:2rem;}
+    .rc-header{padding:1rem 1.5rem;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+    .rc-header h3{font-size:14px;font-weight:500;}
+    .btn-refresh{font-size:12px;color:var(--mu);background:none;border:none;cursor:pointer;}
+    table{width:100%;border-collapse:collapse;}
+    th{text-align:left;font-size:11px;font-weight:500;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;padding:10px 16px;border-bottom:1px solid var(--bd);background:#fafafa;}
+    td{padding:11px 16px;font-size:13px;border-bottom:1px solid var(--bd);}
+    tr:last-child td{border-bottom:none;}
+    .badge-m{background:var(--sb);color:var(--sn);font-size:10px;padding:2px 8px;border-radius:99px;}
+    .badge-b{background:var(--wb);color:var(--wn);font-size:10px;padding:2px 8px;border-radius:99px;}
+    .badge-t{background:#EEF2FF;color:#4338CA;font-size:10px;padding:2px 8px;border-radius:99px;}
+    .btn-rm{background:var(--db);color:var(--dn);border:none;font-size:11px;padding:4px 10px;border-radius:99px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+    .empty{padding:2.5rem;text-align:center;color:var(--mu);font-size:14px;}
+    .ical-card{background:#fff;border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem;margin-bottom:2rem;}
+    .ical-title{font-size:14px;font-weight:500;margin-bottom:4px;}
+    .ical-sub{font-size:13px;color:var(--mu);margin-bottom:1.25rem;line-height:1.6;}
+    .ical-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1.25rem;}
+    .ical-suite{border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;}
+    .ical-suite-nome{font-size:13px;font-weight:500;margin-bottom:4px;}
+    .ical-sync-info{font-size:11px;color:var(--mu);}
+    .btn-sync{background:var(--v);color:#fff;border:none;padding:10px 24px;border-radius:99px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+    .sync-res{font-size:12px;margin-top:10px;display:none;line-height:1.6;}
+  </style>
+</head>
+<body>
+
+<div id="tela-login">
+  <div class="login-box">
+    <div class="login-logo">Pousada do Marcão 2</div>
+    <div class="login-sub">Painel de administração</div>
+    <div class="campo"><label>E-mail</label><input type="email" id="l-email" placeholder="seu@email.com" /></div>
+    <div class="campo"><label>Senha</label><input type="password" id="l-senha" placeholder="••••••••" /></div>
+    <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+    <div class="erro" id="erro-login">E-mail ou senha incorretos.</div>
+  </div>
+</div>
+
+<div id="tela-admin">
+  <div class="topbar">
+    <div class="topbar-logo">Pousada do Marcão 2 · Admin</div>
+    <div class="topbar-right">
+      <span class="topbar-user" id="user-email"></span>
+      <button class="btn-sair" onclick="fazerLogout()">Sair</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn on" onclick="mudarTab('calendario',this)">📅 Calendário</button>
+    <button class="tab-btn" onclick="mudarTab('reservas',this)">📋 Reservas</button>
+    <button class="tab-btn" onclick="mudarTab('ical',this)">🔄 Sync Booking</button>
+    <button class="tab-btn" onclick="mudarTab('precos',this)">💰 Preços</button>
+  </div>
+
+  <div class="main" id="tab-calendario">
+    <div class="status-grid" id="status-grid"><div class="sc"><div class="sc-nome">Carregando...</div></div></div>
+    <div class="cal-wrap">
+      <div class="cal-top">
+        <div class="cal-top-title">Calendário de disponibilidade</div>
+        <select class="suite-sel" id="suite-sel" onchange="renderCal()">
+          <option value="1">Suíte Casal </option>
+          <option value="2">Suíte Standard </option>
+          <option value="3">Suíte Standard 2</option>
+          <option value="4">Suíte Master </option>
+        </select>
+      </div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="navMes(-1)">‹ Anterior</button>
+        <div class="cal-nav-title" id="cal-title"></div>
+        <button class="cal-nav-btn" onclick="navMes(1)">Próximo ›</button>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-header">
+          <div class="cal-lbl">Dom</div><div class="cal-lbl">Seg</div><div class="cal-lbl">Ter</div>
+          <div class="cal-lbl">Qua</div><div class="cal-lbl">Qui</div><div class="cal-lbl">Sex</div><div class="cal-lbl">Sáb</div>
+        </div>
+        <div class="cal-days" id="cal-days"></div>
+      </div>
+      <div class="legend">
+        <div class="leg"><div class="leg-dot" style="background:#E1F5EE;border:.5px solid #5DCAA5;"></div>Disponível</div>
+        <div class="leg"><div class="leg-dot" style="background:#FCEBEB;border:.5px solid #F09595;"></div>Ocupado (manual)</div>
+        <div class="leg"><div class="leg-dot" style="background:#FAEEDA;border:.5px solid #F0C27B;"></div>Reservado (Booking)</div>
+        <div class="leg"><div class="leg-dot" style="background:#EEF2FF;border:.5px solid #A5B4FC;"></div>Preço especial</div>
+      </div>
+      <div class="modal-edit" id="modal-edit">
+        <div class="modal-title" id="modal-title">Editar período</div>
+        <div id="modal-feriado-aviso" style="display:none;background:#FAEEDA;border-radius:8px;padding:8px 12px;font-size:12px;color:#854F0B;margin-bottom:12px;">
+          🎉 Esta data é um feriado ou data especial — considere definir um preço especial!
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex-wrap:wrap;">
+          <div style="border:0.5px solid var(--bd);border-radius:var(--rs);padding:12px;">
+            <div style="font-size:12px;font-weight:500;color:var(--texto);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;">🔒 Disponibilidade</div>
+            <div class="form-row" style="margin-bottom:0;">
+              <div class="fc"><label>De</label><input type="date" id="m-de" /></div>
+              <div class="fc"><label>Até</label><input type="date" id="m-ate" /></div>
+            </div>
+            <div class="fc" style="margin-top:10px;">
+              <label>Status</label>
+              <select id="m-status"><option value="livre">Disponível</option><option value="ocupado">Ocupado</option></select>
+            </div>
+            <div class="fc" style="margin-top:10px;">
+              <label>Observação (opcional)</label>
+              <input type="text" id="m-obs" placeholder="Ex: Reserva WhatsApp — João" />
+            </div>
+          </div>
+          <div style="border:0.5px solid var(--bd);border-radius:var(--rs);padding:12px;">
+            <div style="font-size:12px;font-weight:500;color:var(--texto);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;">💰 Preço especial</div>
+            <div style="font-size:12px;color:var(--mu);margin-bottom:10px;line-height:1.5;">Defina um valor diferente do preço base para este período. Deixe em branco para usar o preço padrão.</div>
+            <div class="fc">
+              <label>Valor / noite (R$)</label>
+              <input type="number" id="m-valor" placeholder="Ex: 900 (deixe vazio para padrão)" />
+            </div>
+            <div id="m-preco-info" style="font-size:11px;color:var(--mu);margin-top:6px;"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+          <button class="btn-salvar" onclick="salvarPeriodo()">Salvar</button>
+          <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+        </div>
+        <div class="msg-ok" id="msg-ok">✓ Salvo com sucesso!</div>
+        <div class="msg-err" id="msg-err">Erro ao salvar.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main" id="tab-reservas" style="display:none;">
+    <div class="reservas-card">
+      <div class="rc-header"><h3>Todos os períodos</h3><button class="btn-refresh" onclick="carregarTabela()">↻ Atualizar</button></div>
+      <div id="tabela-wrap"><div class="empty">Carregando...</div></div>
+    </div>
+  </div>
+
+  <div class="main" id="tab-ical" style="display:none;">
+    <div class="ical-card">
+      <div class="ical-title">Sincronização com Booking.com</div>
+      <div class="ical-sub">Clique em "Sincronizar agora" para importar todas as reservas do Booking. As reservas do Booking aparecem em amarelo no calendário e não podem ser removidas manualmente. Sincronize sempre que quiser atualizar.</div>
+      <div class="ical-grid" id="ical-grid"><div class="ical-suite"><div class="ical-suite-nome">Carregando...</div></div></div>
+      <button class="btn-sync" onclick="syncTodas()">🔄 Sincronizar agora</button>
+      <div class="sync-res" id="sync-res"></div>
+    </div>
+  </div>
+
+  <!-- ABA PREÇOS -->
+  <div class="main" id="tab-precos" style="display:none;">
+    <div class="ical-card">
+      <div class="ical-title">Configurar preços por suíte</div>
+      <div class="ical-sub">Defina o preço base (para até 2 pessoas) e o valor cobrado por cada pessoa extra a partir da 3ª pessoa. Bebês (até 2 anos) não são cobrados.</div>
+      <div id="precos-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1.25rem;"></div>
+      <button class="btn-sync" onclick="salvarPrecos()">💾 Salvar preços</button>
+      <div class="sync-res" id="precos-res"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import {
+  auth, PRECOS_PADRAO, EXTRAS_PADRAO,
+  getReservas, adicionarReserva, removerReserva,
+  getTarifas, adicionarTarifa, removerTarifa,
+  getConfigSuites, salvarConfigSuites,
+  sincronizarTodasSuites, getUltimaSincronizacao,
+  signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from './js/firebase.js';
+
+const NOMES = {'1':'Suíte Casal','2':'Suíte Standard','3':'Suíte Standard 2','4':'Suíte Master'};
+const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const TODAY = new Date().toISOString().split('T')[0];
+let anoAtual = new Date().getFullYear();
+let mesAtual = new Date().getMonth();
+let RC = [], TC = [], CFG = null;
+let selEnt = null, selSai = null;
+
+onAuthStateChanged(auth, u => {
+  if (u) {
+    document.getElementById('tela-login').style.display='none';
+    document.getElementById('tela-admin').style.display='block';
+    document.getElementById('user-email').textContent=u.email;
+    carregarTudo();
+  } else {
+    document.getElementById('tela-login').style.display='flex';
+    document.getElementById('tela-admin').style.display='none';
+  }
+});
+
+window.fazerLogin = async () => {
+  const er = document.getElementById('erro-login');
+  er.style.display='none';
+  try { await signInWithEmailAndPassword(auth, document.getElementById('l-email').value.trim(), document.getElementById('l-senha').value); }
+  catch(e){ er.style.display='block'; }
+};
+window.fazerLogout = () => signOut(auth);
+
+window.mudarTab = (id, btn) => {
+  ['calendario','reservas','ical','precos'].forEach(t => document.getElementById('tab-'+t).style.display = t===id?'block':'none');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(id==='reservas') carregarTabela();
+  if(id==='ical') carregarIcalInfo();
+  if(id==='precos') carregarPrecos();
+};
+
+async function carregarTudo() {
+  [RC, TC, CFG] = await Promise.all([getReservas(), getTarifas(), getConfigSuites()]);
+  renderStatus();
+  renderCal();
+}
+
+/* ── Sincronização automática a cada 30 minutos ── */
+async function autoSync() {
+  try { await sincronizarTodasSuites(); await carregarTudo(); } catch(e) {}
+}
+setInterval(autoSync, 30 * 60 * 1000);
+
+function estaOcupada(sid, data) {
+  return RC.some(r => r.suiteId===String(sid) && data>=r.de && data<r.ate);
+}
+
+function renderStatus() {
+  document.getElementById('status-grid').innerHTML = [1,2,3,4].map(sid => {
+    const ocup = estaOcupada(sid, TODAY);
+    const prox = RC.filter(r=>r.suiteId===String(sid)&&r.ate>TODAY).sort((a,b)=>a.de.localeCompare(b.de))[0];
+    return `<div class="sc"><div class="sc-nome">${NOMES[sid]}</div>
+      <span class="sc-badge ${ocup?'b-ocup':'b-livre'}">${ocup?'Ocupado hoje':'Disponível'}</span>
+      <div class="sc-info">${prox?'Próx: '+fmtBr(prox.de)+' → '+fmtBr(prox.ate):'Sem bloqueios futuros'}</div></div>`;
+  }).join('');
+}
+
+/* ── Feriados no admin ── */
+const FERIADOS_ADMIN = {
+  '01-01':'Confraternização','04-21':'Tiradentes','05-01':'Dia do Trabalho',
+  '09-07':'Independência','10-12':'Aparecida','11-02':'Finados',
+  '11-15':'Rep. República','12-25':'Natal',
+  '2026-02-16':'Carnaval','2026-02-17':'Carnaval','2026-02-18':'Carnaval',
+  '2026-04-03':'Sexta Santa','2026-04-05':'Páscoa','2026-06-11':'Corpus Christi',
+  '2027-02-08':'Carnaval','2027-02-09':'Carnaval',
+  '2027-03-26':'Sexta Santa','2027-03-28':'Páscoa','2027-06-03':'Corpus Christi',
+};
+const ESPECIAIS_ADMIN = {
+  '05-10':'Dia das Mães','06-12':'Namorados','08-09':'Dia dos Pais',
+  '12-24':'Véspera Natal','12-31':'Réveillon',
+};
+function getFeriadoAdmin(ds){
+  const[,m,d]=ds.split('-'); const k=m+'-'+d;
+  if(FERIADOS_ADMIN[ds])  return {tipo:'feriado',  nome:FERIADOS_ADMIN[ds]};
+  if(FERIADOS_ADMIN[k])   return {tipo:'feriado',  nome:FERIADOS_ADMIN[k]};
+  if(ESPECIAIS_ADMIN[k])  return {tipo:'especial', nome:ESPECIAIS_ADMIN[k]};
+  return null;
+}
+
+window.renderCal = () => {
+  const sid = document.getElementById('suite-sel').value;
+  document.getElementById('cal-title').textContent = MESES[mesAtual]+' '+anoAtual;
+  const cont = document.getElementById('cal-days');
+  cont.innerHTML='';
+  const primeiro = new Date(anoAtual,mesAtual,1).getDay();
+  const total    = new Date(anoAtual,mesAtual+1,0).getDate();
+  for(let i=0;i<primeiro;i++){const v=document.createElement('div');v.className='cal-day vazio';cont.appendChild(v);}
+  for(let d=1;d<=total;d++){
+    const ds = `${anoAtual}-${String(mesAtual+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const res= RC.find(r=>r.suiteId===sid&&ds>=r.de&&ds<r.ate);
+    const tar= TC.find(t=>t.suiteId===sid&&ds>=t.de&&ds<t.ate);
+    const passado = ds<TODAY;
+    const padrao = CFG ? (CFG['base_'+sid] || PRECOS_PADRAO[sid]) : PRECOS_PADRAO[sid];
+    const isEnt = ds===selEnt, isSai = ds===selSai;
+    const isRng = selEnt&&selSai&&ds>selEnt&&ds<selSai;
+    const fInfo = !passado&&!res ? getFeriadoAdmin(ds) : null;
+    let cls='cal-day';
+    if(passado) cls+=' passado';
+    else if(isEnt||isSai||isRng) cls+=' selecionado';
+    else if(res&&res.fonte==='booking') cls+=' ocup-booking';
+    else if(res) cls+=' ocup';
+    else if(tar&&tar.valor!==padrao) cls+=' especial';
+    else if(fInfo&&fInfo.tipo==='feriado') cls+=' feriado-admin';
+    else if(fInfo&&fInfo.tipo==='especial') cls+=' especial-admin';
+    else cls+=' livre';
+    const preco = tar?tar.valor:padrao;
+    const el=document.createElement('div');
+    el.className=cls;
+    if(fInfo&&!isEnt&&!isSai&&!isRng){
+      el.innerHTML=`<span class="day-n">${d}</span><span class="day-p">${fInfo.nome}</span>`;
+      el.title=fInfo.nome;
+    } else {
+      el.innerHTML=`<span class="day-n">${d}</span><span class="day-p">${res?(res.fonte==='booking'?'Booking':'Bloq.'):'R$'+preco.toLocaleString('pt-BR')}</span>`;
+    }
+    if(!passado) el.addEventListener('click',()=>clicouDia(ds,sid,res,tar));
+    cont.appendChild(el);
+  }
+};
+
+function clicouDia(ds,sid,res,tar){
+  if(!selEnt||selSai){selEnt=ds;selSai=null;renderCal();return;}
+  if(ds<=selEnt){selEnt=ds;selSai=null;renderCal();return;}
+  selSai=ds;
+  renderCal();
+  abrirModal(selEnt,selSai,sid,res,tar);
+}
+
+function abrirModal(de,ate,sid,res,tar){
+  document.getElementById('modal-title').textContent=`Editar — ${NOMES[sid]} — ${fmtBr(de)} → ${fmtBr(ate)}`;
+  document.getElementById('m-de').value=de;
+  document.getElementById('m-ate').value=ate;
+  document.getElementById('m-status').value=res?'ocupado':'livre';
+  document.getElementById('m-obs').value=res?res.obs||'':'';
+  document.getElementById('m-valor').value=tar?tar.valor:'';
+
+  // Aviso de feriado
+  const fInfo = getFeriadoAdmin(de);
+  const aviso = document.getElementById('modal-feriado-aviso');
+  if(fInfo){ aviso.style.display='block'; aviso.textContent='🎉 '+fInfo.nome+' — considere definir um preço especial para este período!'; }
+  else aviso.style.display='none';
+
+  // Info do preço base
+  const base  = CFG ? (CFG['base_'+sid]  || PRECOS_PADRAO[sid])  : PRECOS_PADRAO[sid];
+  const extra = CFG ? (CFG['extra_'+sid] || EXTRAS_PADRAO[sid])  : EXTRAS_PADRAO[sid];
+  document.getElementById('m-preco-info').textContent = `Preço base: R$ ${base.toLocaleString('pt-BR')}/noite · Pessoa extra: R$ ${extra.toLocaleString('pt-BR')}`;
+
+  document.getElementById('msg-ok').style.display='none';
+  document.getElementById('msg-err').style.display='none';
+  const modal=document.getElementById('modal-edit');
+  modal.classList.add('on');
+  modal.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+window.navMes = d => {
+  mesAtual+=d;
+  if(mesAtual>11){mesAtual=0;anoAtual++;}
+  if(mesAtual<0){mesAtual=11;anoAtual--;}
+  selEnt=null;selSai=null;
+  renderCal();
+};
+
+window.fecharModal=()=>document.getElementById('modal-edit').classList.remove('on');
+
+window.salvarPeriodo=async()=>{
+  const sid=document.getElementById('suite-sel').value;
+  const de=document.getElementById('m-de').value;
+  const ate=document.getElementById('m-ate').value;
+  const status=document.getElementById('m-status').value;
+  const valorStr=document.getElementById('m-valor').value.trim();
+  const valor=valorStr ? parseInt(valorStr) : null;
+  const obs=document.getElementById('m-obs').value.trim();
+  const ok=document.getElementById('msg-ok');
+  const err=document.getElementById('msg-err');
+  ok.style.display=err.style.display='none';
+  if(!de||!ate||ate<=de){err.textContent='Datas inválidas.';err.style.display='block';return;}
+  try{
+    // Remove reservas manuais sobrepostas
+    for(const r of RC.filter(r=>r.suiteId===sid&&r.fonte!=='booking'&&r.de<ate&&r.ate>de)) await removerReserva(r.id);
+    // Remove tarifas sobrepostas
+    for(const t of TC.filter(t=>t.suiteId===sid&&t.de<ate&&t.ate>de)) await removerTarifa(t.id);
+    // Salva reserva se ocupado
+    if(status==='ocupado') await adicionarReserva(sid,de,ate,obs||'Bloqueio manual','manual');
+    // Salva tarifa se valor especial foi definido
+    if(valor) await adicionarTarifa(sid,de,ate,valor);
+    ok.style.display='block';
+    setTimeout(()=>ok.style.display='none',2500);
+    await carregarTudo();
+    fecharModal();
+    selEnt=null;selSai=null;
+  } catch(e){err.textContent='Erro: '+e.message;err.style.display='block';}
+};
+
+window.carregarTabela=async()=>{
+  RC=await getReservas();TC=await getTarifas();
+  const todos=[...RC.map(r=>({...r,tipo:'res'})),...TC.map(t=>({...t,tipo:'tar'}))].sort((a,b)=>a.de.localeCompare(b.de));
+  if(!todos.length){document.getElementById('tabela-wrap').innerHTML='<div class="empty">Nenhum período cadastrado.</div>';return;}
+  const rows=todos.map(r=>`<tr style="${r.ate<=TODAY?'opacity:.45':''}">
+    <td>${NOMES[r.suiteId]||r.suiteId}</td><td>${fmtBr(r.de)}</td><td>${fmtBr(r.ate)}</td>
+    <td>${r.tipo==='res'?`<span class="${r.fonte==='booking'?'badge-b':'badge-m'}">${r.fonte==='booking'?'Booking':'Manual'}</span>`:'<span class="badge-t">Tarifa especial</span>'}</td>
+    <td>${r.tipo==='res'?(r.obs||'—'):'R$ '+Number(r.valor).toLocaleString('pt-BR')+'/noite'}</td>
+    <td>${r.fonte!=='booking'?`<button class="btn-rm" onclick="remover('${r.id}','${r.tipo}')">Remover</button>`:'—'}</td>
+  </tr>`).join('');
+  document.getElementById('tabela-wrap').innerHTML=`<table><thead><tr><th>Suíte</th><th>Entrada</th><th>Saída</th><th>Tipo</th><th>Info</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+};
+
+window.remover=async(id,tipo)=>{
+  if(!confirm('Remover?'))return;
+  if(tipo==='res') await removerReserva(id); else await removerTarifa(id);
+  carregarTabela();carregarTudo();
+};
+
+async function carregarIcalInfo(){
+  const sync=await getUltimaSincronizacao();
+  document.getElementById('ical-grid').innerHTML=[1,2,3,4].map(sid=>`
+    <div class="ical-suite"><div class="ical-suite-nome">${NOMES[sid]}</div>
+    <div class="ical-sync-info">${sync['suite_'+sid]?'Última sync: '+new Date(sync['suite_'+sid]).toLocaleString('pt-BR'):'Nunca sincronizado'}</div></div>`).join('');
+}
+
+async function carregarPrecos(){
+  const cfg = await getConfigSuites();
+  document.getElementById('precos-grid').innerHTML = [1,2,3,4].map(sid => `
+    <div style="border:0.5px solid var(--bd);border-radius:var(--r);padding:1rem;">
+      <div style="font-size:13px;font-weight:500;margin-bottom:12px;">${NOMES[sid]}</div>
+      <div class="fc" style="margin-bottom:10px;">
+        <label>Preço base (até 2 pessoas)</label>
+        <input type="number" id="base-${sid}" value="${cfg?cfg['base_'+sid]||PRECOS_PADRAO[sid]:PRECOS_PADRAO[sid]}" placeholder="${PRECOS_PADRAO[sid]}" />
+      </div>
+      <div class="fc">
+        <label>Valor por pessoa extra (a partir da 3ª)</label>
+        <input type="number" id="extra-${sid}" value="${cfg?cfg['extra_'+sid]||EXTRAS_PADRAO[sid]:EXTRAS_PADRAO[sid]}" placeholder="${EXTRAS_PADRAO[sid]}" />
+      </div>
+    </div>`).join('');
+}
+
+window.salvarPrecos = async () => {
+  const res = document.getElementById('precos-res');
+  res.style.display='none';
+  const cfg = {};
+  for(const sid of ['1','2','3','4']){
+    cfg['base_'+sid]  = parseInt(document.getElementById('base-'+sid).value)  || PRECOS_PADRAO[sid];
+    cfg['extra_'+sid] = parseInt(document.getElementById('extra-'+sid).value) || EXTRAS_PADRAO[sid];
+  }
+  try {
+    await salvarConfigSuites(cfg);
+    res.textContent='✓ Preços salvos com sucesso! O site já reflete os novos valores.';
+    res.style.color='#1D9E75'; res.style.display='block';
+    setTimeout(()=>res.style.display='none', 3000);
+  } catch(e) {
+    res.textContent='Erro ao salvar: '+e.message;
+    res.style.color='#E24B4A'; res.style.display='block';
+  }
+};
+
+window.syncTodas=async()=>{
+  const btn=document.querySelector('.btn-sync');
+  const res=document.getElementById('sync-res');
+  btn.textContent='⏳ Sincronizando...';btn.disabled=true;res.style.display='none';
+  try{
+    const result=await sincronizarTodasSuites();
+    let msg='✓ Concluído! ';
+    for(const[id,r] of Object.entries(result)) msg+=`${NOMES[id]}: ${r.ok?r.count+' reservas':'erro — '+r.msg}. `;
+    res.textContent=msg;res.style.color='#1D9E75';res.style.display='block';
+    await carregarIcalInfo();await carregarTudo();
+  }catch(e){res.textContent='Erro: '+e.message;res.style.color='#E24B4A';res.style.display='block';}
+  btn.textContent='🔄 Sincronizar agora';btn.disabled=false;
+};
+
+function fmtBr(s){if(!s)return'—';const[a,m,d]=s.split('-');return`${d}/${m}/${a}`;}
+</script>
+</body>
+</html>

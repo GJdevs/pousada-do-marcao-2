@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pousada no Guarujá — Pousada do Marcão 2 | Praia do Pernambuco</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Pousada no Guarujá a 100m da Praia do Pernambuco e 50m do Shopping Villa Jequitimar. Café da manhã incluso, piscina, Wi-Fi. Reserve já!" />
+  <meta name="keywords" content="pousada no guarujá, pousada guarujá, hospedagem guarujá, pousada praia do pernambuco, pousada villa jequitimar, guarujá litoral" />
+  <meta property="og:title" content="Pousada no Guarujá — Pousada do Marcão 2" />
+  <meta property="og:description" content="A 100m da Praia do Pernambuco no Guarujá. Café da manhã incluso, piscina e 4 suítes confortáveis." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/disponibilidade.css" />
+
+  <style>
+    /* ── OVERLAY "VER MAIS" NA GALERIA ──────────────────── */
+    .galeria-item { cursor: pointer; }
+    .galeria-item-mais { position: relative; }
+    .galeria-mais-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(4, 52, 44, 0.72);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .galeria-mais-overlay:hover { background: rgba(4, 52, 44, 0.85); }
+    .galeria-mais-icone { font-size: 28px; margin-bottom: 2px; }
+    .galeria-mais-count { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.75); }
+
+    .lb { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.93); z-index:9999; align-items:center; justify-content:center; }
+    .lb.open { display:flex; }
+    .lb img { max-width:90vw; max-height:88vh; object-fit:contain; border-radius:var(--radius); }
+    .lb-close { position:absolute; top:1.25rem; right:1.25rem; background:rgba(255,255,255,0.12); border:none; color:#fff; font-size:22px; width:42px; height:42px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .lb-prev, .lb-next { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.12); border:none; color:#fff; font-size:28px; width:50px; height:50px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .lb-prev { left:1.25rem; }
+    .lb-next { right:1.25rem; }
+
+    .localizacao { padding: 5rem 2rem; background: var(--areia); }
+    .loc-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; max-width: 1040px; margin: 0 auto; }
+    .loc-mapa { border-radius: var(--radius); overflow: hidden; height: 360px; border: 1px solid var(--borda); }
+    .loc-mapa iframe { width:100%; height:100%; border:0; display:block; }
+    .loc-item { display:flex; gap:12px; margin-bottom:1.25rem; }
+    .loc-icon { width:40px; height:40px; background:var(--verde-claro); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; margin-top:2px; }
+    .loc-item-text strong { display:block; font-size:14px; font-weight:500; color:var(--texto); margin-bottom:3px; }
+    .loc-item-text span { font-size:13px; color:var(--texto-muted); line-height:1.6; }
+    .shopping-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+    .shopping-tag { background:var(--verde-claro); color:var(--verde-medio); font-size:11px; font-weight:500; padding:3px 10px; border-radius:99px; }
+
+    .navbar-logo { text-decoration: none; }
+
+    /* ── BOTÃO WHATSAPP CTA ──────────────────────────────── */
+    .cta-wpp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 14px 36px;
+      border-radius: 99px;
+      text-decoration: none;
+      margin-top: 0.5rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .cta-wpp-btn:hover { background: #1ebe5c; transform: translateY(-2px); }
+
+    /* ── CARDS DE VÍDEO NA GALERIA ───────────────────────── */
+    .galeria-video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 1040px;
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .galeria-video-card {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      height: 180px;
+      background: #021a14;
+      cursor: pointer;
+    }
+
+    .galeria-video-card video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .galeria-video-card:hover video { opacity: 0.85; }
+
+    .galeria-video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .play-circle {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .galeria-video-card:hover .play-circle {
+      background: rgba(255,255,255,0.35);
+      transform: scale(1.08);
+    }
+
+    .play-tri {
+      width: 0; height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 16px solid #fff;
+      margin-left: 4px;
+    }
+
+    .galeria-video-label {
+      color: rgba(255,255,255,0.9);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    /* lightbox vídeo */
+    .lb-video { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.96); z-index:9999; align-items:center; justify-content:center; }
+    .lb-video.open { display:flex; }
+    .lb-video video { max-width:92vw; max-height:88vh; border-radius:var(--radius); outline:none; }
+    .lb-video-close { position:absolute; top:1.25rem; right:1.25rem; background:rgba(255,255,255,0.12); border:none; color:#fff; font-size:22px; width:42px; height:42px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+
+    @media(max-width:768px){
+      .loc-inner { grid-template-columns:1fr; }
+      .galeria-video-grid { grid-template-columns: 1fr; }
+      .galeria-video-card { height: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO com foto de praia ─────────────────────────── -->
+  <section class="hero" id="inicio">
+    <div class="hero-bg" style="background-image:url('img/praia.jpg');"></div>
+    <div class="hero-overlay"></div>
+
+    <nav class="navbar">
+      <a href="#inicio" class="navbar-logo">Pousada do Marcão 2</a>
+      <ul class="navbar-links">
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#quartos">Suítes</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#localizacao">Localização</a></li>
+        <li><a href="#quartos" class="navbar-cta">Reservar</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-badge">Pousada no Guarujá · Praia do Pernambuco</div>
+      <h1>O seu refúgio perfeito à beira-mar no Guarujá</h1>
+      <p>A 100 metros da Praia do Pernambuco. Café da manhã incluso, piscina e 4 suítes confortáveis.</p>
+      <div class="hero-btns">
+        <a href="#quartos" class="btn-primary">Ver suítes</a>
+        <!--<a href="https://wa.me/5513998059595" target="_blank" class="btn-outline">WhatsApp</a> -->
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-hint-line"></div>
+      <span>role</span>
+    </div>
+  </section>
+
+  <!-- ── WAVE ──────────────────────────────────────────── -->
+  <div class="wave-wrap" style="background:#fff;">
+    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="60">
+      <path d="M0,0 C360,60 720,0 1080,40 C1260,60 1380,20 1440,30 L1440,0 Z" fill="#04342C"/>
+      <rect x="0" y="58" width="1440" height="2" fill="#fff"/>
+    </svg>
+  </div>
+
+  <!-- ── DIFERENCIAIS ───────────────────────────────────── -->
+  <section class="diferenciais">
+    <div class="container">
+      <div class="header">
+        <div class="sec-label">Por que escolher a gente</div>
+        <h2 class="sec-title">Pousada no Guarujá com localização privilegiada</h2>
+        <p class="sec-sub">A 100m da Praia do Pernambuco, no Guarujá — do conforto do quarto ao sabor do café da manhã.</p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon">🏖️</div>
+          <h3>100m da praia</h3>
+          <p>A 100 metros da Praia do Pernambuco no Guarujá. Acorde, coloque a sandália e já está na areia.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🛍️</div>
+          <h3>50m do Shopping</h3>
+          <p>A 100 metros do Villa Jequitimar — com Mercado Pão de Açúcar, gastronomia, farmácia e estacionamento.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🏊</div>
+          <h3>Piscina</h3>
+          <p>Área de lazer com piscina para adultos e crianças, perfeita para relaxar depois da praia.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">☕</div>
+          <h3>Café da manhã incluso</h3>
+          <p>Mesa farta todos os dias, com produtos frescos e feitos com carinho.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🅿️</div>
+          <h3>Estacionamento grátis</h3>
+          <p>Vaga garantida para todos os hóspedes, sem custo adicional.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">⛱️</div>
+          <h3>Serviço de praia incluso</h3>
+          <p>Montagem de cadeira e guarda-sol na Praia do Pernambuco pela Barraca do Marcão, incluso na diária.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">💳</div>
+          <h3>Parcele em 12x</h3>
+          <p>Reservas parceladas em até 12x no cartão de crédito.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🍖</div>
+          <h3>Churrasqueira</h3>
+          <p>Área de churrasco disponível para os hóspedes aproveitarem com família e amigos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUARTOS ────────────────────────────────────────── -->
+  <section class="quartos" id="quartos">
+    <div class="container">
+      <div class="header">
+        <div class="sec-label">Acomodações</div>
+        <h2 class="sec-title">Escolha a sua suíte</h2>
+        <p class="sec-sub">Conheça nossas suítes e depois selecione as datas para ver disponibilidade e valores.</p>
+      </div>
+
+      <!-- Cards das suítes -->
+      <div class="quartos-grid">
+
+        <div class="quarto-card" onclick="window.location='suite-1.html'">
+          <div class="quarto-img">
+            <img src="img/quartos/suite-1/foto-1.jpeg" alt="Suíte Standard — Pousada no Guarujá" />
+          </div>
+          <div class="quarto-body">
+            <div class="quarto-tag">Suíte 1</div>
+            <h3>Suíte Casal</h3>
+            <p>Cama de casal + cama de solteiro, ar-condicionado, banheiro privativo. Pode ser adequada para até 8 pessoas.</p>
+            <div class="quarto-footer">
+              <div class="quarto-price">Consulte <span>/ noite</span></div>
+              <a href="suite-1.html" class="btn-reservar" onclick="event.stopPropagation()">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="quarto-card" onclick="window.location='suite-2.html'">
+          <div class="quarto-img">
+            <img src="img/quartos/suite-2/foto-1.jpeg" alt="Suíte Família — Pousada no Guarujá" />
+          </div>
+          <div class="quarto-body">
+            <div class="quarto-tag">Suíte 2</div>
+            <h3>Suíte Standard</h3>
+            <p>Beliche + duas camas de solteiro, ar-condicionado, banheiro privativo. Pode ser adequada para até 8 pessoas.</p>
+            <div class="quarto-footer">
+              <div class="quarto-price">Consulte <span>/ noite</span></div>
+              <a href="suite-2.html" class="btn-reservar" onclick="event.stopPropagation()">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="quarto-card" onclick="window.location='suite-3.html'">
+          <div class="quarto-img">
+            <img src="img/quartos/suite-3/foto-1.jpeg" alt="Suíte Dupla — Pousada no Guarujá" />
+          </div>
+          <div class="quarto-body">
+            <div class="quarto-tag">Suíte 3</div>
+            <h3>Suíte Standard 2</h3>
+            <p>Duas camas de casal, ar-condicionado, banheiro privativo. Pode ser adequada para até 8 pessoas.</p>
+            <div class="quarto-footer">
+              <div class="quarto-price">Consulte <span>/ noite</span></div>
+              <a href="suite-3.html" class="btn-reservar" onclick="event.stopPropagation()">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="quarto-card" onclick="window.location='suite-4.html'">
+          <div class="quarto-img">
+            <img src="img/quartos/suite-4/foto-1.jpeg" alt="Suíte Master — Pousada no Guarujá" />
+          </div>
+          <div class="quarto-body">
+            <div class="quarto-tag">Suíte 4 · Master</div>
+            <h3>Suíte Master</h3>
+            <p>Cama de casal com estrutura clássica, varanda privativa, banheiro privativo. Pode ser adequada para até 8 pessoas.</p>
+            <div class="quarto-footer">
+              <div class="quarto-price">Consulte <span>/ noite</span></div>
+              <a href="suite-4.html" class="btn-reservar" onclick="event.stopPropagation()">Ver detalhes</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Separador -->
+      <div style="display:flex;align-items:center;gap:12px;margin:2rem 0 1.25rem;">
+        <div style="flex:1;height:0.5px;background:rgba(0,0,0,0.1);"></div>
+        <div style="font-size:12px;color:var(--muted);">Verificar disponibilidade e valores</div>
+        <div style="flex:1;height:0.5px;background:rgba(0,0,0,0.1);"></div>
+      </div>
+
+      <!-- Buscador de disponibilidade (Firebase) -->
+      <div id="disponibilidade-index"></div>
+
+    </div>
+  </section>
+
+  <!-- ── GALERIA ────────────────────────────────────────── -->
+  <section class="galeria">
+    <div class="container">
+      <div class="galeria-header">
+        <div class="sec-label">Galeria</div>
+        <h2 class="sec-title">Conheça a pousada</h2>
+      </div>
+    </div>
+
+    <!-- Grade de fotos: 5 visíveis -->
+    <div class="galeria-grid" id="galeria-grade">
+      <div class="galeria-item" data-index="0"><img src="img/pousada/5.jpeg" alt="Vista aérea piscina e mar" /></div>
+      <div class="galeria-item" data-index="1"><img src="img/pousada/4.jpeg" alt="Vista drone" /></div>
+      <div class="galeria-item" data-index="2"><img src="img/pousada/8.jpeg" alt="Pousada e mar" /></div>
+      <div class="galeria-item" data-index="3"><img src="img/pousada/3.jpeg" alt="Sala de estar" /></div>
+      <div class="galeria-item galeria-item-mais" data-index="4">
+        <img src="img/pousada/6.jpeg" alt="Salão de sinuca" />
+        <div class="galeria-mais-overlay">
+          <span class="galeria-mais-icone"></span>
+          <span>Ver todas as fotos</span>
+          <span class="galeria-mais-count">+7 imagens</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards de vídeo do drone -->
+    <div class="galeria-video-grid">
+      <div class="galeria-video-card" data-video="img/videos/video1.mp4">
+        <video src="img/videos/video1.mp4" muted playsinline preload="metadata"></video>
+        <div class="galeria-video-overlay">
+          <div class="play-circle"><div class="play-tri"></div></div>
+          <span class="galeria-video-label">Drone · Área e piscina</span>
+        </div>
+      </div>
+      <div class="galeria-video-card" data-video="img/videos/video2.mp4">
+        <video src="img/videos/video2.mp4" muted playsinline preload="metadata"></video>
+        <div class="galeria-video-overlay">
+          <div class="play-circle"><div class="play-tri"></div></div>
+          <span class="galeria-video-label">Drone · Vista da pousada</span>
+        </div>
+      </div>
+      <div class="galeria-video-card" data-video="img/videos/video3.mp4">
+        <video src="img/videos/video3.mp4" muted playsinline preload="metadata"></video>
+        <div class="galeria-video-overlay">
+          <div class="play-circle"><div class="play-tri"></div></div>
+          <span class="galeria-video-label">Drone · Entorno e praia</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox fotos -->
+  <div class="lb" id="lb">
+    <button class="lb-close" id="lb-close">✕</button>
+    <button class="lb-prev"  id="lb-prev">‹</button>
+    <img id="lb-img" src="" alt="Foto ampliada" />
+    <button class="lb-next"  id="lb-next">›</button>
+  </div>
+
+  <!-- Lightbox vídeo -->
+  <div class="lb-video" id="lb-video">
+    <button class="lb-video-close" id="lb-video-close">✕</button>
+    <video id="lb-video-player" controls autoplay playsinline style="max-width:92vw;max-height:88vh;border-radius:12px;"></video>
+  </div>
+
+  <!-- ── SOBRE ──────────────────────────────────────────── -->
+  <section class="sobre" id="sobre">
+    <div class="container">
+      <div class="sobre-inner">
+        <div class="sobre-img-wrap">
+          <img src="img/pousada/20.jpeg" alt="Vista aérea da Pousada do Marcão 2 no Guarujá com piscina e mar" />
+          <!-- <div class="sobre-badge-float">
+            <div class="num">4.9★</div>
+            <div class="label">Avaliação média<br>dos hóspedes</div>
+          </div>-->
+        </div>
+        <div class="sobre-text">
+          <div class="sec-label">Nossa história</div>
+          <h2 class="sec-title">Uma pousada feita com carinho no Guarujá</h2>
+          <p class="sec-sub">A Pousada do Marcão 2 é uma das pousadas mais bem localizadas do Guarujá. Nasceu do sonho de oferecer uma hospedagem aconchegante, com o calor do litoral e a atenção de uma família.</p>
+          <p class="sec-sub" style="margin-top: 1rem;">Aqui, você não é apenas mais um hóspede. É um convidado especial que merece atenção, conforto e momentos inesquecíveis à beira-mar no Guarujá.</p>
+          <div class="sobre-stats">
+            <div>
+              <div class="stat-num">100m</div>
+              <div class="stat-label">Da praia</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CAFÉ DA MANHÃ ──────────────────────────────────── -->
+  <section class="cafe">
+    <div class="container">
+      <div class="cafe-inner">
+        <div class="cafe-text">
+          <div class="sec-label">Incluso na diária</div>
+          <h2 class="sec-title">Café da manhã caprichado</h2>
+          <p class="sec-sub">Todo dia, uma mesa farta esperando por você. Frutas frescas da época, pães artesanais, frios, bolos caseiros e sucos naturais. O jeito certo de começar um dia perfeito no Guarujá.</p>
+          <div class="cafe-tags">
+            <span class="cafe-tag">🍓 Frutas frescas</span>
+            <span class="cafe-tag">🥐 Pães artesanais</span>
+            <span class="cafe-tag">🧀 Frios e queijos</span>
+            <span class="cafe-tag">🥤 Sucos naturais</span>
+            <span class="cafe-tag">🥞 Tapioca</span>
+            <span class="cafe-tag">🍰 Bolo caseiro</span>
+          </div>
+        </div>
+        <div class="cafe-img-wrap">
+          <img src="img/cafe.jpeg" alt="Café da manhã pousada Guarujá" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DEPOIMENTOS ────────────────────────────────────── 
+  <section class="depoimentos">
+    <div class="container">
+      <div class="header">
+        <div class="sec-label">O que dizem nossos hóspedes</div>
+        <h2 class="sec-title">Avaliações reais</h2>
+        <p class="sec-sub">A opinião de quem já ficou e voltou para contar.</p>
+      </div>
+      <div class="dep-grid">
+        <div class="dep-card">
+          <div class="dep-stars">★★★★★</div>
+          <p class="dep-text">"Melhor pousada que já fiquei no Guarujá! Café da manhã incrível, piscina ótima e a 5 minutinhos da praia a pé. Com certeza voltamos!"</p>
+          <div class="dep-autor">
+            <div class="dep-avatar">A</div>
+            <div>
+              <div class="dep-nome">Ana Carolina</div>
+              <div class="dep-origem">São Paulo, SP</div>
+            </div>
+          </div>
+        </div>
+        <div class="dep-card">
+          <div class="dep-stars">★★★★★</div>
+          <p class="dep-text">"Localização perfeita no Guarujá, do lado do shopping e pertíssimo da Praia do Pernambuco. Quartos limpos e atendimento nota 10!"</p>
+          <div class="dep-autor">
+            <div class="dep-avatar">R</div>
+            <div>
+              <div class="dep-nome">Ricardo Mendes</div>
+              <div class="dep-origem">Santos, SP</div>
+            </div>
+          </div>
+        </div>
+        <div class="dep-card">
+          <div class="dep-stars">★★★★★</div>
+          <p class="dep-text">"Fomos em família com duas crianças e foi perfeito. Piscina ótima, todo mundo super simpático. Já estamos planejando a volta para o ano que vem."</p>
+          <div class="dep-autor">
+            <div class="dep-avatar">F</div>
+            <div>
+              <div class="dep-nome">Fernanda Lima</div>
+              <div class="dep-origem">Campinas, SP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>-->
+
+  <!-- ── LOCALIZAÇÃO ────────────────────────────────────── -->
+  <section class="localizacao" id="localizacao">
+    <div class="loc-inner">
+      <div>
+        <div class="sec-label">Como chegar</div>
+        <h2 class="sec-title">Localização privilegiada no Guarujá</h2>
+        <p class="sec-sub" style="max-width:100%;margin-bottom:1.5rem;">No coração da Praia do Pernambuco, a poucos metros de tudo que você precisa.</p>
+
+        <div class="loc-item">
+          <div class="loc-icon">📍</div>
+          <div class="loc-item-text">
+            <strong>Endereço</strong>
+            <span>Av. Marjorie da Silva Prado, 1000<br>Praia do Pernambuco — Guarujá, SP<br>CEP 11.444-000</span>
+          </div>
+        </div>
+
+        <div class="loc-item">
+          <div class="loc-icon">🏖️</div>
+          <div class="loc-item-text">
+            <strong>Praia do Pernambuco</strong>
+            <span>A apenas 100 metros a pé</span>
+          </div>
+        </div>
+
+        <div class="loc-item">
+          <div class="loc-icon">🛍️</div>
+          <div class="loc-item-text">
+            <strong>Shopping Villa Jequitimar</strong>
+            <span>A 50 metros — com Pão de Açúcar, gastronomia, farmácia e estacionamento</span>
+            <div class="shopping-tags">
+              <span class="shopping-tag">🛒 Pão de Açúcar</span>
+              <span class="shopping-tag">🍽️ Gastronomia</span>
+              <span class="shopping-tag">💊 Farmácia</span>
+              <span class="shopping-tag">🅿️ Estacionamento</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="loc-mapa">
+        <iframe
+          src="https://www.google.com/maps?q=-23.97064460333542,-46.18794170014052&z=17&output=embed"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Localização Pousada do Marcão 2 — Guarujá">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA / CONTATO ──────────────────────────────────── -->
+  <section class="cta-section" id="contato">
+    <div class="container">
+      <div class="sec-label">Vamos planejar sua estadia no Guarujá</div>
+      <h2 class="sec-title">Pronto para sua próxima escapada?</h2>
+      <p class="sec-sub">Fale diretamente com a gente pelo WhatsApp. Respondemos em poucos minutos!</p>
+      <a href="https://wa.me/5513998059595?text=Olá!%20Gostaria%20de%20saber%20a%20disponibilidade%20e%20os%20valores%20dos%20quartos%20da%20Pousada%20do%20Marcão%202.%20Podem%20me%20ajudar%3F"
+         target="_blank"
+         class="cta-wpp-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#25D366" style="flex-shrink:0;">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Pousada do Marcão 2</div>
+        <p class="footer-desc"></p>
+        <p class="footer-desc" style="margin-top:10px; line-height:1.8;">
+          Av. Marjorie da Silva Prado, 1000<br>
+          Praia do Pernambuco — Guarujá, SP<br>
+          CEP 11.444-000<br>
+          <a href="" target="_blank" style="color:var(--verde-tag);text-decoration:none;"></a>
+        </p>
+        <div class="footer-social">
+          <a href="#" class="social-btn">📷</a>
+          <a href="#" class="social-btn">👍</a>
+          <a href="https://wa.me/5513998059595" target="_blank" class="social-btn">💬</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#quartos">Suítes</a></li>
+          <li><a href="#sobre">Sobre nós</a></li>
+          <li><a href="#localizacao">Localização</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informações</h4>
+        <ul>
+          <li><a href="#">Check-in: 14h às 22h</a></li>
+          <li><a href="#">Check-out: 7h às 12h</a></li>
+          <li><a href="#">Café: 7h às 10h</a></li>
+          <li><a href="#">Aceita pets</a></li>
+          <li><a href="#">100m da praia</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Pousada do Marcão 2 · Guarujá, SP · Todos os direitos reservados</span>
+      <span>Praia do Pernambuco · CEP 11.444-000</span>
+    </div>
+  </footer>
+
+  <!-- JS principal -->
+  <script src="js/main.js"></script>
+
+
+  <script>
+    /* ── Lightbox fotos ──────────────────────────────────── */
+            const FOTOS = [
+      'img/pousada/9.jpeg',
+      'img/pousada/20.jpeg',
+      'img/pousada/22.jpeg',
+      'img/pousada/16.jpeg',
+      'img/pousada/24.jpeg',
+      'img/pousada/1.jpeg',
+      'img/pousada/5.jpeg',
+      'img/pousada/2.jpeg',
+      'img/pousada/3.jpeg',
+      'img/pousada/4.jpeg',
+      'img/pousada/6.jpeg',
+      'img/pousada/8.jpeg',
+      'img/pousada/10.jpeg',
+      'img/pousada/11.jpeg',
+      'img/pousada/12.jpeg',
+      'img/pousada/13.jpeg',
+      'img/pousada/14.jpeg',
+      'img/pousada/15.jpeg',
+      'img/pousada/17.jpeg',
+      'img/pousada/18.jpeg',
+      'img/pousada/19.jpeg',
+      'img/pousada/21.jpeg',
+      'img/pousada/23.jpeg',
+      'img/pousada/25.jpeg'
+    ];
+    let idx = 0;
+    const lb    = document.getElementById('lb');
+    const lbImg = document.getElementById('lb-img');
+
+    function abrirLb(i){ idx=i; lbImg.src=FOTOS[i]; lb.classList.add('open'); document.body.style.overflow='hidden'; }
+    function nav(d){ idx=(idx+d+FOTOS.length)%FOTOS.length; lbImg.src=FOTOS[idx]; }
+    function fechar(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+
+    document.querySelectorAll('.galeria-item:not(.galeria-item-mais)').forEach(function(el){
+      el.addEventListener('click', function(){ abrirLb(parseInt(el.dataset.index)); });
+    });
+    document.querySelector('.galeria-item-mais').addEventListener('click', function(){ abrirLb(4); });
+    document.getElementById('lb-close').onclick = fechar;
+    document.getElementById('lb-prev').onclick  = function(){ nav(-1); };
+    document.getElementById('lb-next').onclick  = function(){ nav(1); };
+    lb.addEventListener('click', function(e){ if(e.target===lb) fechar(); });
+    document.addEventListener('keydown', function(e){
+      if(lb.classList.contains('open')){
+        if(e.key==='Escape') fechar();
+        if(e.key==='ArrowLeft')  nav(-1);
+        if(e.key==='ArrowRight') nav(1);
+      }
+    });
+
+    /* ── Lightbox vídeos ─────────────────────────────────── */
+    const lbVid       = document.getElementById('lb-video');
+    const lbVidPlayer = document.getElementById('lb-video-player');
+
+    document.querySelectorAll('.galeria-video-card').forEach(function(card){
+      card.addEventListener('click', function(){
+        lbVidPlayer.src = card.dataset.video;
+        lbVidPlayer.load();
+        lbVidPlayer.play().catch(function(){});
+        lbVid.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function fecharVid(){
+      lbVidPlayer.pause();
+      lbVidPlayer.src = '';
+      lbVid.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('lb-video-close').onclick = fecharVid;
+    lbVid.addEventListener('click', function(e){ if(e.target===lbVid) fecharVid(); });
+    document.addEventListener('keydown', function(e){
+      if(lbVid.classList.contains('open') && e.key==='Escape') fecharVid();
+    });
+
+    /* ── Botão CTA WhatsApp ──────────────────────────────── */
+    var btnCtaWpp = document.getElementById('btn-cta-wpp');
+    if(btnCtaWpp) btnCtaWpp.addEventListener('click', function(){
+      const nome = document.getElementById('cta-nome') ? document.getElementById('cta-nome').value.trim() : '';
+      const msg  = encodeURIComponent('Olá! '+(nome?'Meu nome é '+nome+' e g':'G')+'ostaria de informações sobre hospedagem na Pousada do Marcão 2 no Guarujá.');
+      window.open('https://wa.me/5513998059595?text='+msg, '_blank');
+    });
+  </script>
+
+  <script type="module">
+    import { iniciarBuscaIndex } from './js/disponibilidade.js';
+    iniciarBuscaIndex('disponibilidade-index');
+  </script>
+</body>
+</html>
