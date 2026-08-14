@@ -10,12 +10,12 @@ import { getAuth, signInWithEmailAndPassword,
          signOut, onAuthStateChanged }        from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
 
 const firebaseConfig = {
-  apiKey:            'AIzaSyAXleS23p0UESd98A8JGvekRUGQfhDED0E',
-  authDomain:        'pousada-do-marcao-2.firebaseapp.com',
-  projectId:         'pousada-do-marcao-2',
-  storageBucket:     'pousada-do-marcao-2.firebasestorage.app',
-  messagingSenderId: '633574322592',
-  appId:             '1:633574322592:web:d91da645d54a64ed8434c5'
+  apiKey:            'SUA_API_KEY_AQUI',
+  authDomain:        'seu-projeto.firebaseapp.com',
+  projectId:         'seu-projeto',
+  storageBucket:     'seu-projeto.firebasestorage.app',
+  messagingSenderId: 'SEU_SENDER_ID',
+  appId:             'SEU_APP_ID'
 };
 
 const app  = initializeApp(firebaseConfig);
@@ -25,10 +25,10 @@ export const auth = getAuth(app);
 export const PRECOS_PADRAO = { '1': 650, '2': 880, '3': 880, '4': 900 };
 
 export const ICAL_LINKS = {
-  '1': 'https://ical.booking.com/v1/export?t=d583c20f-0ddb-4bfd-9aad-0662282bce41',
-  '2': 'https://ical.booking.com/v1/export?t=8caca3a7-db0e-4dc1-9fc3-8123d0a56877',
-  '3': 'https://ical.booking.com/v1/export?t=2868acb8-f098-4965-9a30-448218bb23d1',
-  '4': 'https://ical.booking.com/v1/export?t=f90b7631-87c5-45e1-be3a-0cf6a67c2fbb'
+  '1': 'https://ical.booking.com/v1/export?t=SEU_TOKEN_SUITE_1',
+  '2': 'https://ical.booking.com/v1/export?t=SEU_TOKEN_SUITE_2',
+  '3': 'https://ical.booking.com/v1/export?t=SEU_TOKEN_SUITE_3',
+  '4': 'https://ical.booking.com/v1/export?t=SEU_TOKEN_SUITE_4'
 };
 
 /* ── RESERVAS ── */
@@ -141,6 +141,33 @@ export async function getConfigSuites() {
 
 export async function salvarConfigSuites(config) {
   await setDoc(doc(db,'config','suites'), config);
+}
+
+/* ── Promoções ─────────────────────────────────────────── */
+export async function getPromocoes() {
+  try {
+    const snap = await getDocs(collection(db, 'promocoes'));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) { return []; }
+}
+
+export async function adicionarPromocao(dados) {
+  return await addDoc(collection(db, 'promocoes'), dados);
+}
+
+export async function removerPromocao(id) {
+  return await deleteDoc(doc(db, 'promocoes', id));
+}
+
+export async function getPromocoesAtivas() {
+  try {
+    const hoje = new Date().toISOString().split('T')[0];
+    const snap = await getDocs(collection(db, 'promocoes'));
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(p => p.ate >= hoje && p.de <= hoje || p.ate >= hoje && p.de > hoje)
+      .sort((a,b) => a.de.localeCompare(b.de));
+  } catch(e) { return []; }
 }
 
 export { signInWithEmailAndPassword, signOut, onAuthStateChanged };
