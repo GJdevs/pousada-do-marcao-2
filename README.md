@@ -6,8 +6,7 @@ Site institucional desenvolvido para a **Pousada do Marcão 2**, localizada na P
 
 ## 🌐 Deploy
 
-O site está hospedado na **Cloudflare Pages** e pode ser acessado em:
-> https://pousadadomarcao2.com.br/
+Site desativado no momento!
 
 ---
 
